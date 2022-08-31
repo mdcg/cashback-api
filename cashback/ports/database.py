@@ -24,5 +24,5 @@ class DatabasePort(ABC):
         pass
 
     @abstractmethod
-    def get_all_sales_from_a_reseller(self, cpf: str) -> list[Sale]: 
+    def get_all_sales_from_a_reseller(self, cpf: str) -> list[Sale]:
         pass

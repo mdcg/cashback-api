@@ -1,11 +1,12 @@
 from decimal import Decimal
 from enum import Enum
+from cashback.settings import AUTOMATIC_APPROVED_RESELLERS_CPFS
 
 
 class SaleStatus(Enum):
-    IN_VALIDATION = "Em validação"
     APPROVED = "Aprovado"
     DENIED = "Recusado"
+    WAITING_FOR_VALIDATION = "Em validação"
 
 
 class Sale:
@@ -20,8 +21,14 @@ class Sale:
         self.code = code
         self.date = date
         self.value = value
-        self.status = status
+        self.status = self.process_default_status()
         self.reseller_cpf = reseller_cpf
+
+    def process_default_status(self):
+        if self.reseller_cpf in AUTOMATIC_APPROVED_RESELLERS_CPFS:
+            return SaleStatus.APPROVED
+
+        return SaleStatus.WAITING_FOR_VALIDATION
 
 
 class Reseller:
