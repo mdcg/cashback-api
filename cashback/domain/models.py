@@ -1,6 +1,8 @@
 from decimal import Decimal
 from enum import Enum
+
 from cashback.settings import AUTOMATIC_APPROVED_RESELLERS_CPFS
+from werkzeug.security import check_password_hash
 
 
 class SaleStatus(Enum):
@@ -10,11 +12,13 @@ class SaleStatus(Enum):
 
 
 class Reseller:
-    def __init__(self, fullname: str, cpf: str, email: str, password: str):
+    def __init__(
+        self, fullname: str, cpf: str, email: str, hashed_password: str
+    ):
         self.fullname = fullname
         self.cpf = cpf
         self.email = email
-        self.__password = password
+        self.hashed_password = hashed_password
 
     def to_dict(self):
         return {
