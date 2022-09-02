@@ -20,7 +20,7 @@ class InMemoryAdapter(DatabasePort):
         return None
 
     def create_sale(self, sale_payload: dict) -> bool:
-        self.sale.append(sale_payload)
+        self.sales.append(sale_payload)
         return True
 
     def get_sale(self, code: str) -> dict:

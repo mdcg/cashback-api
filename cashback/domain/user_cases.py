@@ -5,8 +5,10 @@ from cashback.domain.exceptions import ResellerNotFoundException
 
 class CashbackAPIUserCases:
     def __init__(self):
-        self.database = CONFIG["database"]
-        self.external_api_communication = CONFIG["external_api_communication"]
+        self.database = CONFIG["database"]()
+        self.external_api_communication = CONFIG[
+            "external_api_communication"
+        ]()
 
     def create_reseller(self, payload):
         # Validar payload... Pode ser no próprio Model, chamando por exemplo,
@@ -22,10 +24,10 @@ class CashbackAPIUserCases:
 
     def create_sale(self, payload):
         # Validar payload... Principalmente checando se vem o CPF do reseller
-        self.get_reseller(payload.get("cpf"))
+        self.get_reseller(payload.get("reseller_cpf"))
         return self.database.create_sale(payload)
 
     def get_reseller_sales(self, cpf):
         self.get_reseller(cpf)
         sales = self.database.get_all_sales_from_a_reseller(cpf)
-        return [Sale(**sale) for sale in sales]
+        return [Sale(**sale).to_dict() for sale in sales]

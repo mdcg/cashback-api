@@ -16,6 +16,13 @@ class Reseller:
         self.email = email
         self.__password = password
 
+    def to_dict(self):
+        return {
+            "fullname": self.fullname,
+            "cpf": self.cpf,
+            "email": self.email,
+        }
+
 
 class Sale:
     def __init__(
@@ -23,19 +30,32 @@ class Sale:
         code: str,
         date: str,
         value: Decimal,
-        reseller: Reseller,
+        reseller_cpf: str,
     ):
         self.code = code
         self.date = date
         self.value = value
+        self.reseller_cpf = reseller_cpf
         self.status = self.process_default_status()
-        self.reseller = reseller
 
     def process_default_status(self):
-        if self.reseller.cpf in AUTOMATIC_APPROVED_RESELLERS_CPFS:
-            return SaleStatus.APPROVED
+        if self.reseller_cpf in AUTOMATIC_APPROVED_RESELLERS_CPFS:
+            return SaleStatus.APPROVED.value
 
-        return SaleStatus.WAITING_FOR_VALIDATION
+        return SaleStatus.WAITING_FOR_VALIDATION.value
+
+    def to_dict(self, include_reseller_cpf=False):
+        payload = {
+            "code": self.code,
+            "date": self.date,
+            "value": self.value,
+            "status": self.status,
+        }
+
+        if include_reseller_cpf:
+            payload["reseller_cpf"] = self.reseller_cpf
+
+        return payload
 
 
 class Cashback:

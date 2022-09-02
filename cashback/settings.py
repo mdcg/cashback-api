@@ -10,7 +10,7 @@ AUTOMATIC_APPROVED_RESELLERS_CPFS = getenv(
     "AUTOMATIC_APPROVED_RESELLERS_CPFS", "153.509.460-56"
 ).split(",")
 
-DATABASE = getenv("DATABASE", "postgresql")
+DATABASE = getenv("DATABASE", "inmemory")
 
 EXTERNAL_API_COMMUNICATION = getenv("DATABASE", "restful")
 
