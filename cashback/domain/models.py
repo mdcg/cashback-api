@@ -9,34 +9,33 @@ class SaleStatus(Enum):
     WAITING_FOR_VALIDATION = "Em validação"
 
 
-class Sale:
-    def __init__(
-        self,
-        code: str,
-        date: str,
-        value: Decimal,
-        status: SaleStatus,
-        reseller_cpf: str,
-    ):
-        self.code = code
-        self.date = date
-        self.value = value
-        self.status = self.process_default_status()
-        self.reseller_cpf = reseller_cpf
-
-    def process_default_status(self):
-        if self.reseller_cpf in AUTOMATIC_APPROVED_RESELLERS_CPFS:
-            return SaleStatus.APPROVED
-
-        return SaleStatus.WAITING_FOR_VALIDATION
-
-
 class Reseller:
     def __init__(self, fullname: str, cpf: str, email: str, password: str):
         self.fullname = fullname
         self.cpf = cpf
         self.email = email
         self.__password = password
+
+
+class Sale:
+    def __init__(
+        self,
+        code: str,
+        date: str,
+        value: Decimal,
+        reseller: Reseller,
+    ):
+        self.code = code
+        self.date = date
+        self.value = value
+        self.status = self.process_default_status()
+        self.reseller = reseller
+
+    def process_default_status(self):
+        if self.reseller.cpf in AUTOMATIC_APPROVED_RESELLERS_CPFS:
+            return SaleStatus.APPROVED
+
+        return SaleStatus.WAITING_FOR_VALIDATION
 
 
 class Cashback:
@@ -56,7 +55,9 @@ class Cashback:
         percentage = None
         if self.__total_sold <= Decimal(1000):
             percentage = Decimal(0.10)
-        elif self.__total_sold > Decimal(1000) and self.__total_sold <= Decimal(1500):
+        elif self.__total_sold > Decimal(
+            1000
+        ) and self.__total_sold <= Decimal(1500):
             percentage = Decimal(0.15)
         elif self.__total_sold > Decimal(1500):
             percentage = Decimal(0.20)
