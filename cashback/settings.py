@@ -24,7 +24,7 @@ AVAILABLE_EXTERNAL_API_IMPLEMENTATIONS = {
 }
 
 CONFIG = {
-    "database": AVAILABLE_DATABASE_IMPLEMENTATIONS.get(DATABASE, "postgresql"),
+    "database": AVAILABLE_DATABASE_IMPLEMENTATIONS.get(DATABASE, "inmemory"),
     "external_api_communication": AVAILABLE_EXTERNAL_API_IMPLEMENTATIONS.get(
         EXTERNAL_API_COMMUNICATION, "restful"
     ),
@@ -36,4 +36,7 @@ CONFIG = {
 
 POSTGRESQL_URI = getenv("POSTGRESQL_URI")
 
-EXTERNAL_CASHBACK_RESTFUL_API_URL = getenv("EXTERNAL_CASHBACK_RESTFUL_API_URL")
+EXTERNAL_CASHBACK_RESTFUL_API_URL = getenv(
+    "EXTERNAL_CASHBACK_RESTFUL_API_URL",
+    "https://mdaqk8ek5j.execute-api.us-east1.amazonaws.com/v1/cashback",
+)

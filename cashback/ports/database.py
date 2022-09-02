@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-from cashback.domain.models import Reseller, Sale
 
 
 class DatabasePort(ABC):
@@ -8,21 +7,21 @@ class DatabasePort(ABC):
         pass
 
     @abstractmethod
-    def create_reseller(self, reseller_payload: Reseller) -> bool:
+    def create_reseller(self, reseller_payload: dict) -> bool:
         pass
 
     @abstractmethod
-    def get_reseller(self, cpf: str) -> Reseller:
+    def get_reseller(self, cpf: str) -> dict:
         pass
 
     @abstractmethod
-    def create_sale(self, sale_payload: Sale) -> bool:
+    def create_sale(self, sale_payload: dict) -> bool:
         pass
 
     @abstractmethod
-    def get_sale(self, code: str) -> Sale:
+    def get_sale(self, code: str) -> dict:
         pass
 
     @abstractmethod
-    def get_all_sales_from_a_reseller(self, cpf: str) -> list[Sale]:
+    def get_all_sales_from_a_reseller(self, cpf: str) -> list[dict]:
         pass
