@@ -1,9 +1,11 @@
 import logging
 import signal
 
-from cashback.api.healthcheck.views import healthcheck_blueprint
-
 from flask import Flask
+
+from cashback.api.healthcheck.views import healthcheck_blueprint
+from cashback.api.reseller.views import resellers_blueprint
+from cashback.api.sales.views import sales_blueprint
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -33,6 +35,8 @@ if __name__ == "__main__":
 
     app = Flask(__name__)
     app.register_blueprint(healthcheck_blueprint, url_prefix="/healthcheck")
+    app.register_blueprint(resellers_blueprint)
+    app.register_blueprint(sales_blueprint)
 
     try:
         app.run(host="0.0.0.0", use_reloader=False)
