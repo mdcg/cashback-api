@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "3a76c1cb-52ab-4d03-8885-bbe7e3de9b0d",
+		"_postman_id": "b10930bb-f538-4e7f-8150-1550deecdec2",
 		"name": "Cashback",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -12,7 +12,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"cpf\": \"06111363506\",\n    \"fullname\": \"Mauro de Carvalho\",\n    \"email\": \"mauro.dcg@gmail.com\",\n    \"password\": \"123456789\"\n}",
+					"raw": "{\n    \"cpf\": \"01234567890\",\n    \"fullname\": \"Mauro de Carvalho\",\n    \"email\": \"mauro.reseller@cash.com\",\n    \"password\": \"123456789\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -33,10 +33,43 @@
 			"response": []
 		},
 		{
-			"name": "Create a Sale",
+			"name": "Authentication",
 			"request": {
 				"method": "POST",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"mauro.reseller@cash.com\",\n    \"password\": \"123456789\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5000/auth",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"auth"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create a Sale",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NjIyNjQ5NTgsImlhdCI6MTY2MjIzNjE1OCwic3ViIjoiMDYxMTEzNjM1MDYifQ.8LrBKDkVnkVa_RHHvlnTU_LK3JkXFdMhCzsSq5vmvZY",
+						"type": "default"
+					}
+				],
 				"body": {
 					"mode": "raw",
 					"raw": "{\n    \"code\": \"123-123-123\",\n    \"date\": \"1221321\",\n    \"value\": 100\n}",
@@ -47,14 +80,12 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:5000/resellers/06111363506/sales",
+					"raw": "localhost:5000/sales",
 					"host": [
 						"localhost"
 					],
 					"port": "5000",
 					"path": [
-						"resellers",
-						"06111363506",
 						"sales"
 					]
 				}
@@ -65,17 +96,50 @@
 			"name": "Sales from Reseller",
 			"request": {
 				"method": "GET",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NjIyNjQ5NTgsImlhdCI6MTY2MjIzNjE1OCwic3ViIjoiMDYxMTEzNjM1MDYifQ.8LrBKDkVnkVa_RHHvlnTU_LK3JkXFdMhCzsSq5vmvZY",
+						"type": "default"
+					}
+				],
 				"url": {
-					"raw": "localhost:5000/resellers/06111363506/sales",
+					"raw": "localhost:5000/sales",
 					"host": [
 						"localhost"
 					],
 					"port": "5000",
 					"path": [
-						"resellers",
-						"06111363506",
 						"sales"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[External route] - Accumulated cashback",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://mdaqk8ek5j.execute-api.us-east1.amazonaws.com/v1/cashback?cpf=01234567890",
+					"protocol": "https",
+					"host": [
+						"mdaqk8ek5j",
+						"execute-api",
+						"us-east1",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						"v1",
+						"cashback"
+					],
+					"query": [
+						{
+							"key": "cpf",
+							"value": "01234567890"
+						}
 					]
 				}
 			},
