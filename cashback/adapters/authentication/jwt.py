@@ -32,7 +32,7 @@ class JWTAuthenticationAdapter(AuthenticationPort):
     @staticmethod
     def decode_auth_token(auth_token):
         try:
-            payload = jwt.decode(auth_token, SECRET_KEY)
+            payload = jwt.decode(auth_token, SECRET_KEY, algorithms="HS256")
         except jwt.ExpiredSignatureError:
             raise TokenExpiredException()
         except jwt.InvalidTokenError:

@@ -25,7 +25,7 @@ def authentication():
     try:
         auth_token = cashback_user_cases.authenticate_user(email, password)
     except UnauthorizedException:
-        return generate_response_payload(status="fail", http_code=403)
+        return generate_response_payload(status="fail", http_code=401)
 
     return generate_response_payload(
         data={"token": auth_token}, status="success", http_code=200

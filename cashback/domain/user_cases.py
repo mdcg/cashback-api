@@ -26,7 +26,7 @@ class CashbackAPIUserCases:
 
         return self.authentication.encode_auth_token(reseller_data["cpf"])
 
-    def verify_authentication_token(self, token):
+    def extract_reseller_identifier_from_authentication_token(self, token):
         return self.authentication.decode_auth_token(token)
 
     def create_reseller(self, payload):
