@@ -10,7 +10,6 @@ https://github.com/omniti-labs/jsend
 """
 from flask import jsonify
 
-
 JSEND_RESPONSE_FORMAT = {
     "success": {
         "status": "success",

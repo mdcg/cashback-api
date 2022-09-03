@@ -1,6 +1,6 @@
-from cashback.settings import CONFIG
-from cashback.domain.models import Reseller, Sale
 from cashback.domain.exceptions import ResellerNotFoundException
+from cashback.domain.models import Reseller, Sale
+from cashback.settings import CONFIG
 
 
 class CashbackAPIUserCases:
