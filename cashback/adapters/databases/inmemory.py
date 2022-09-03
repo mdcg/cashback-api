@@ -6,16 +6,19 @@ class InMemoryAdapter(DatabasePort):
         self.resellers = []
         self.sales = []
 
-    def reseller_authentication(self, email: str, password: str):
-        pass
-
     def create_reseller(self, reseller_payload: dict) -> bool:
         self.resellers.append(reseller_payload)
         return True
 
-    def get_reseller(self, cpf: str) -> dict:
+    def get_reseller_by_cpf(self, cpf: str) -> dict:
         for reseller in self.resellers:
             if reseller.get("cpf") == cpf:
+                return reseller
+        return None
+
+    def get_reseller_by_email(self, email: str) -> dict:
+        for reseller in self.resellers:
+            if reseller.get("email") == email:
                 return reseller
         return None
 

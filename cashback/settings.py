@@ -17,12 +17,6 @@ EXTERNAL_API_COMMUNICATION = getenv("DATABASE", "restful")
 
 AUTHENTICATION = getenv("AUTHENTICATION", "jwt")
 
-# Esse valor é usado para determinar a complexidade da criptografia, consulte
-# bcrypt para obter mais detalhes.
-BCRYPT_LOG_ROUNDS = 13
-
-SECRET_KEY = getenv("SECRET_KEY", "super_secret")
-
 AVAILABLE_DATABASE_IMPLEMENTATIONS = {
     "inmemory": InMemoryAdapter,
     "postgresql": PostgreSQLAdapter,

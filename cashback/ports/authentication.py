@@ -2,10 +2,12 @@ from abc import ABC, abstractmethod
 
 
 class AuthenticationPort(ABC):
+    @staticmethod
     @abstractmethod
     def hash_password(self, password):
         pass
 
+    @staticmethod
     @abstractmethod
     def check_password(self, hashed_password, password):
         pass

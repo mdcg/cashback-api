@@ -4,7 +4,7 @@ from flask import Blueprint
 healthcheck_blueprint = Blueprint("healthcheck", __name__)
 
 
-@healthcheck_blueprint.route("/")
+@healthcheck_blueprint.route("/healthcheck")
 def ping():
     """Essa é a rota mais simples que é utilizada para verificar
     se a API RESTful está online ou não, literalmente funcionando como

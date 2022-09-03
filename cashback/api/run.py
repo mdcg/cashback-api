@@ -6,6 +6,7 @@ from flask import Flask
 from cashback.api.healthcheck.views import healthcheck_blueprint
 from cashback.api.reseller.views import resellers_blueprint
 from cashback.api.sales.views import sales_blueprint
+from cashback.api.auth.views import auth_blueprint
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -34,7 +35,8 @@ if __name__ == "__main__":
     signal.signal(signal.SIGTERM, handle_sigterm)
 
     app = Flask(__name__)
-    app.register_blueprint(healthcheck_blueprint, url_prefix="/healthcheck")
+    app.register_blueprint(healthcheck_blueprint)
+    app.register_blueprint(auth_blueprint)
     app.register_blueprint(resellers_blueprint)
     app.register_blueprint(sales_blueprint)
 

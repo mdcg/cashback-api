@@ -1,6 +1,14 @@
+class ResellerNotFoundException(Exception):
+    pass
+
+
 class UnauthorizedException(Exception):
     pass
 
 
-class ResellerNotFoundException(Exception):
+class TokenExpiredException(Exception):
+    pass
+
+
+class InvalidTokenException(Exception):
     pass
