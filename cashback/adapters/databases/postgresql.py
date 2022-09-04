@@ -1,30 +1,74 @@
+from os import getenv
+from contextlib import contextmanager
+import psycopg2.extras
+import psycopg2
 from cashback.ports.database import DatabasePort
 
-# ToDo:
-# 1 - Criar script para provisionar banco de dados (pode inclusive ser um bash) (Done)
-# 2 - Criar lógica do PostgreSQLAdapter
-# 3 - Criar variáveis de ambiente e testar com o Docker Compose
-# 4 - A API externa não está funcionando.. Pensar em um Bypass
+
+POSTGRESQL_URI = getenv(
+    "POSTGRESQL_URI", "postgresql://postgres:postgres@localhost:5432/postgres"
+)
 
 
 class PostgreSQLAdapter(DatabasePort):
-    def __init__(self):
-        pass
+    @contextmanager
+    def get_connection(self):
+        conn = psycopg2.connect(POSTGRESQL_URI)
+        cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        try:
+            yield (conn, cursor)
+        finally:
+            cursor.close()
+            conn.close()
 
     def create_reseller(self, reseller_payload: dict) -> bool:
-        pass
+        with self.get_connection() as (conn, cur):
+            cur.execute(
+                (
+                    "INSERT INTO resellers (fullname, cpf, email, password)"
+                    "VALUES (%s, %s, %s, %s);"
+                ),
+                (
+                    reseller_payload["fullname"],
+                    reseller_payload["cpf"],
+                    reseller_payload["email"],
+                    reseller_payload["password"],
+                ),
+            )
+            conn.commit()
 
     def get_reseller_by_cpf(self, cpf: str) -> dict:
-        pass
+        with self.get_connection() as (_, cur):
+            cur.execute("SELECT * FROM resellers WHERE cpf=%s;", (cpf,))
+            return cur.fetchone()
 
     def get_reseller_by_email(self, email: str) -> dict:
-        pass
+        with self.get_connection() as (_, cur):
+            cur.execute("SELECT * FROM resellers WHERE email=%s;", (email,))
+            return cur.fetchone()
 
     def create_sale(self, sale_payload: dict) -> bool:
-        pass
+        with self.get_connection() as (conn, cur):
+            cur.execute(
+                (
+                    "INSERT INTO sales (code, date, value, reseller_cpf)"
+                    "VALUES (%s, %s, %s, %s);"
+                ),
+                (
+                    sale_payload["code"],
+                    sale_payload["date"],
+                    sale_payload["value"],
+                    sale_payload["reseller_cpf"],
+                ),
+            )
+            conn.commit()
 
     def get_sale(self, code: str) -> dict:
-        pass
+        with self.get_connection() as (_, cur):
+            cur.execute("SELECT * FROM sales WHERE code=%s;", (code,))
+            return cur.fetchone()
 
     def get_all_sales_from_a_reseller(self, cpf: str) -> list[dict]:
-        pass
+        with self.get_connection() as (conn, cur):
+            cur.execute("SELECT * FROM sales WHERE reseller_cpf=%s;", (cpf,))
+            return cur.fetchall()

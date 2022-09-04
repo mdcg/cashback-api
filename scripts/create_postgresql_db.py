@@ -15,7 +15,9 @@ handler.setFormatter(
 )
 logger.addHandler(handler)
 
-POSTGRESQL_URI = getenv("POSTGRESQL_URI")
+POSTGRESQL_URI = getenv(
+    "POSTGRESQL_URI", "postgresql://postgres:postgres@localhost:5432/postgres"
+)
 
 
 @contextmanager

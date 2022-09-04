@@ -11,7 +11,15 @@ class SaleStatus(Enum):
 
 
 class Reseller:
-    def __init__(self, fullname: str, cpf: str, email: str, password: str):
+    def __init__(
+        self,
+        fullname: str,
+        cpf: str,
+        email: str,
+        password: str,
+        *args: list,
+        **kwargs: dict,
+    ):
         self.fullname = fullname
         self.cpf = cpf
         self.email = email
@@ -32,6 +40,8 @@ class Sale:
         date: str,
         value: Decimal,
         reseller_cpf: str,
+        *args: list,
+        **kwargs: dict,
     ):
         self.code = code
         self.date = date

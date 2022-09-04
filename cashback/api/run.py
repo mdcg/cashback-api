@@ -42,8 +42,9 @@ def create_app(*args, **kwargs):
 
     return app
 
+
 if __name__ == "__main__":
-    app = create_app()    
+    app = create_app()
     try:
         app.run(host="0.0.0.0", use_reloader=False)
     except (KeyboardInterrupt, SystemExit):

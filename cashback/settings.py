@@ -11,7 +11,7 @@ AUTOMATIC_APPROVED_RESELLERS_CPFS = getenv(
     "AUTOMATIC_APPROVED_RESELLERS_CPFS", "153.509.460-56"
 ).split(",")
 
-DATABASE = getenv("DATABASE", "inmemory")
+DATABASE = getenv("DATABASE", "postgresql")
 
 EXTERNAL_API_COMMUNICATION = getenv("DATABASE", "restful")
 
@@ -31,7 +31,7 @@ AVAILABLE_AUTHENTICATION_IMPLEMENTATIONS = {
 }
 
 CONFIG = {
-    "database": AVAILABLE_DATABASE_IMPLEMENTATIONS.get(DATABASE, "inmemory"),
+    "database": AVAILABLE_DATABASE_IMPLEMENTATIONS.get(DATABASE, "postgresql"),
     "external_api_communication": AVAILABLE_EXTERNAL_API_IMPLEMENTATIONS.get(
         EXTERNAL_API_COMMUNICATION, "restful"
     ),
@@ -43,8 +43,6 @@ CONFIG = {
 # /*                    */
 # /* Adapters Settings  */
 # /*                    */
-
-POSTGRESQL_URI = getenv("POSTGRESQL_URI")
 
 EXTERNAL_CASHBACK_RESTFUL_API_URL = getenv(
     "EXTERNAL_CASHBACK_RESTFUL_API_URL",
