@@ -14,7 +14,7 @@ class CashbackAPIUserCases:
             "external_api_communication"
         ]()
 
-    def authenticate_user(self, email, password):
+    def authenticate_user(self, email: str, password: str) -> str:
         reseller_data = self.database.get_reseller_by_email(email=email)
         if not reseller_data:
             raise ResellerNotFoundException()
@@ -28,10 +28,10 @@ class CashbackAPIUserCases:
             reseller_cpf=reseller_data["cpf"]
         )
 
-    def extract_reseller_cpf_from_auth_token(self, token):
+    def extract_reseller_cpf_from_auth_token(self, token: str) -> str:
         return self.authentication.decode_auth_token(auth_token=token)
 
-    def create_reseller(self, payload):
+    def create_reseller(self, payload: dict) -> bool:
         reseller_data = Reseller(**payload)
         reseller_data.validate_register_data()
         # Cria o hash da senha do usuário para ser salva no banco de dados
@@ -45,19 +45,19 @@ class CashbackAPIUserCases:
             }
         )
 
-    def get_reseller(self, cpf):
+    def get_reseller(self, cpf: str) -> Reseller:
         reseller_data = self.database.get_reseller_by_cpf(cpf=cpf)
         if not reseller_data:
             raise ResellerNotFoundException()
 
         return Reseller(**reseller_data)
 
-    def create_sale(self, payload):
+    def create_sale(self, payload: dict) -> bool:
         # Validar payload... Principalmente checando se vem o CPF do reseller
         self.get_reseller(cpf=payload.get("reseller_cpf"))
         return self.database.create_sale(sale_payload=payload)
 
-    def get_reseller_sales(self, cpf):
+    def get_reseller_sales(self, cpf: str) -> list[dict]:
         self.get_reseller(cpf)
         sales = self.database.get_all_sales_from_a_reseller(cpf=cpf)
         return [Sale(**sale).to_dict() for sale in sales]

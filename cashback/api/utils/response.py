@@ -27,8 +27,11 @@ JSEND_RESPONSE_FORMAT = {
 
 
 def generate_response_payload(
-    data=None, status=None, message=None, http_code=200
-):
+    data: dict = None,
+    status: str = None,
+    message: str = None,
+    http_code: int = 200,
+) -> tuple[dict, int]:
     payload = JSEND_RESPONSE_FORMAT.get(status, "success")
 
     if "data" in payload:

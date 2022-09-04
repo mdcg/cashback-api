@@ -41,6 +41,8 @@ class PostgreSQLAdapter(DatabasePort):
             except psycopg2.errors.UniqueViolation:
                 raise ResellerAlreadyRegistedException()
 
+        return True
+
     def get_reseller_by_cpf(self, cpf: str) -> dict:
         with self.get_connection() as (_, cur):
             cur.execute("SELECT * FROM resellers WHERE cpf=%s;", (cpf,))
@@ -66,6 +68,8 @@ class PostgreSQLAdapter(DatabasePort):
                 ),
             )
             conn.commit()
+
+        return True
 
     def get_sale(self, code: str) -> dict:
         with self.get_connection() as (_, cur):

@@ -15,20 +15,20 @@ SECRET_KEY = getenv("SECRET_KEY", "super_secret")
 
 class JWTAuthenticationAdapter(AuthenticationPort):
     @staticmethod
-    def hash_password(password):
+    def hash_password(password: str) -> str:
         bytepasswd = password.encode("utf-8")
         salt = bcrypt.gensalt()
         return bcrypt.hashpw(password=bytepasswd, salt=salt).decode()
 
     @staticmethod
-    def check_password(hashed_password, password):
+    def check_password(hashed_password: str, password: str) -> bool:
         return bcrypt.checkpw(
             password=password.encode("utf-8"),
             hashed_password=hashed_password.encode("utf-8"),
         )
 
     @staticmethod
-    def decode_auth_token(auth_token):
+    def decode_auth_token(auth_token: str) -> str:
         try:
             payload = jwt.decode(
                 jwt=auth_token, key=SECRET_KEY, algorithms="HS256"
@@ -41,7 +41,7 @@ class JWTAuthenticationAdapter(AuthenticationPort):
         return payload["sub"]
 
     @staticmethod
-    def encode_auth_token(reseller_cpf):
+    def encode_auth_token(reseller_cpf: str) -> str:
         payload = {
             "exp": datetime.utcnow() + timedelta(days=0, hours=8),
             "iat": datetime.utcnow(),

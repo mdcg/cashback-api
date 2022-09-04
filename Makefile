@@ -7,7 +7,7 @@ run:
 	@python -m cashback.api.run
 
 lint:
-	@flake8 cashback
+	@flake8 --ignore=W605,E203 cashback
 	@black -l 79 --check --exclude env .
 
 format:
