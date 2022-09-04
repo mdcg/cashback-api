@@ -9,7 +9,7 @@ class AuthenticationPort(ABC):
 
     @staticmethod
     @abstractmethod
-    def check_password(self, hashed_password, password):
+    def check_password(hashed_password, password):
         pass
 
     @staticmethod

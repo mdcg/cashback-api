@@ -1,8 +1,8 @@
 from cashback import cashback_user_cases
+from cashback.api.utils.authentication.decorators import token_required
 from cashback.api.utils.response import generate_response_payload
 from cashback.domain.exceptions import ResellerNotFoundException
 from flask import Blueprint, request
-from cashback.api.utils.authentication.decorators import token_required
 
 sales_blueprint = Blueprint("sales", __name__)
 
@@ -14,7 +14,7 @@ def create_sale(cpf):
     payload["reseller_cpf"] = cpf
 
     try:
-        cashback_user_cases.create_sale(payload)
+        cashback_user_cases.create_sale(payload=payload)
     except ResellerNotFoundException:
         return generate_response_payload(
             data={"cpf": "Revendedor não encontrado."},
@@ -27,9 +27,9 @@ def create_sale(cpf):
 
 @sales_blueprint.route("/sales", methods=["GET"])
 @token_required
-def list_sales(cpf):
+def list_sales(reseller_cpf):
     try:
-        sales = cashback_user_cases.get_reseller_sales(cpf)
+        sales = cashback_user_cases.get_reseller_sales(cpf=reseller_cpf)
     except ResellerNotFoundException:
         return generate_response_payload(
             data={"cpf": "Revendedor não encontrado."},

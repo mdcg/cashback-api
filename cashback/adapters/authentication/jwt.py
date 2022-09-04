@@ -10,9 +10,6 @@ from cashback.ports.authentication import AuthenticationPort
 
 import jwt
 
-# Esse valor é usado para determinar a complexidade da criptografia, consulte
-# bcrypt para obter mais detalhes.
-BCRYPT_LOG_ROUNDS = 13
 SECRET_KEY = getenv("SECRET_KEY", "super_secret")
 
 
@@ -21,18 +18,21 @@ class JWTAuthenticationAdapter(AuthenticationPort):
     def hash_password(password):
         bytepasswd = password.encode("utf-8")
         salt = bcrypt.gensalt()
-        return bcrypt.hashpw(bytepasswd, salt).decode()
+        return bcrypt.hashpw(password=bytepasswd, salt=salt).decode()
 
     @staticmethod
     def check_password(hashed_password, password):
         return bcrypt.checkpw(
-            password.encode("utf-8"), hashed_password.encode("utf-8")
+            password=password.encode("utf-8"),
+            hashed_password=hashed_password.encode("utf-8"),
         )
 
     @staticmethod
     def decode_auth_token(auth_token):
         try:
-            payload = jwt.decode(auth_token, SECRET_KEY, algorithms="HS256")
+            payload = jwt.decode(
+                jwt=auth_token, key=SECRET_KEY, algorithms="HS256"
+            )
         except jwt.ExpiredSignatureError:
             raise TokenExpiredException()
         except jwt.InvalidTokenError:
@@ -48,4 +48,4 @@ class JWTAuthenticationAdapter(AuthenticationPort):
             "sub": reseller_cpf,
         }
 
-        return jwt.encode(payload, SECRET_KEY, algorithm="HS256")
+        return jwt.encode(paylod=payload, key=SECRET_KEY, algorithm="HS256")

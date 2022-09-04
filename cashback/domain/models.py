@@ -2,6 +2,7 @@ from decimal import Decimal
 from enum import Enum
 
 from cashback.settings import AUTOMATIC_APPROVED_RESELLERS_CPFS
+from cashback.domain.validators import Validator
 
 
 class SaleStatus(Enum):
@@ -24,6 +25,12 @@ class Reseller:
         self.cpf = cpf
         self.email = email
         self.password = password
+
+    def validate_register_data(self):
+        Validator.validate_fullname(fullname=self.fullname)
+        Validator.validate_email(email=self.email)
+        Validator.validate_cpf(cpf=self.cpf)
+        Validator.validate_password(password=self.password)
 
     def to_dict(self):
         return {

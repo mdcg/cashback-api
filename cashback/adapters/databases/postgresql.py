@@ -1,9 +1,10 @@
-from os import getenv
 from contextlib import contextmanager
-import psycopg2.extras
-import psycopg2
-from cashback.ports.database import DatabasePort
+from os import getenv
 
+import psycopg2
+import psycopg2.extras
+from cashback.ports.database import DatabasePort
+from cashback.domain.exceptions import ResellerAlreadyRegistedException
 
 POSTGRESQL_URI = getenv(
     "POSTGRESQL_URI", "postgresql://postgres:postgres@localhost:5432/postgres"
@@ -23,19 +24,22 @@ class PostgreSQLAdapter(DatabasePort):
 
     def create_reseller(self, reseller_payload: dict) -> bool:
         with self.get_connection() as (conn, cur):
-            cur.execute(
-                (
-                    "INSERT INTO resellers (fullname, cpf, email, password)"
-                    "VALUES (%s, %s, %s, %s);"
-                ),
-                (
-                    reseller_payload["fullname"],
-                    reseller_payload["cpf"],
-                    reseller_payload["email"],
-                    reseller_payload["password"],
-                ),
-            )
-            conn.commit()
+            try:
+                cur.execute(
+                    (
+                        "INSERT INTO resellers (fullname, cpf, email, password)"
+                        "VALUES (%s, %s, %s, %s);"
+                    ),
+                    (
+                        reseller_payload["fullname"],
+                        reseller_payload["cpf"],
+                        reseller_payload["email"],
+                        reseller_payload["password"],
+                    ),
+                )
+                conn.commit()
+            except psycopg2.errors.UniqueViolation:
+                raise ResellerAlreadyRegistedException()
 
     def get_reseller_by_cpf(self, cpf: str) -> dict:
         with self.get_connection() as (_, cur):

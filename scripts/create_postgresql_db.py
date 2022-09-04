@@ -37,20 +37,32 @@ def create_cashback_db():
     with get_connection() as (conn, cur):
         try:
             cur.execute(
-                (
-                    "CREATE TABLE resellers "
-                    "(id serial PRIMARY KEY, fullname varchar, "
-                    "cpf varchar, email varchar, password varchar);"
-                )
+                """
+                CREATE TABLE resellers
+                    (
+                        id serial PRIMARY KEY,
+                        fullname varchar,
+                        cpf varchar UNIQUE,
+                        email varchar UNIQUE,
+                        password varchar
+                    );
+                """
             )
             cur.execute(
-                (
-                    "CREATE TABLE sales "
-                    "(id serial PRIMARY KEY, code varchar, date TIMESTAMP, "
-                    "value decimal, reseller_cpf varchar);"
-                )
+                """
+                CREATE TABLE sales
+                    (
+                        id serial PRIMARY KEY,
+                        code varchar,
+                        date TIMESTAMP,
+                        value decimal,
+                        reseller_cpf varchar
+                    );
+                """
             )
             conn.commit()
+
+            logger.info("Database created.")
         except psycopg2.DatabaseError as error:
             logger.error(error)
 

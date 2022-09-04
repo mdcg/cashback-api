@@ -1,11 +1,51 @@
 from cashback import cashback_user_cases
 from cashback.api.utils.response import generate_response_payload
 from flask import Blueprint, request
+from cashback.domain.exceptions import (
+    ResellerAlreadyRegistedException,
+    InvalidCPFException,
+    InvalidNameException,
+    InvalidEmailException,
+    InvalidPasswordException,
+)
 
 resellers_blueprint = Blueprint("resellers", __name__)
 
 
 @resellers_blueprint.route("/resellers", methods=["POST"])
 def create_reseller():
-    cashback_user_cases.create_reseller(request.json)
+    try:
+        cashback_user_cases.create_reseller(payload=request.json)
+    except ResellerAlreadyRegistedException as error:
+        return generate_response_payload(
+            data={"message": "CPF/E-mail já cadastrado."},
+            status="fail",
+            http_code=400,
+        )
+    except InvalidCPFException as error:
+        return generate_response_payload(
+            data={"cpf": "CPF inválido."}, status="fail", http_code=400
+        )
+    except InvalidNameException as error:
+        return generate_response_payload(
+            data={"fullname": "Nome inválido."}, status="fail", http_code=400
+        )
+    except InvalidEmailException as error:
+        return generate_response_payload(
+            data={"email": "E-mail inválido."}, status="fail", http_code=400
+        )
+    except InvalidPasswordException:
+        return generate_response_payload(
+            data={
+                "password": (
+                    "Deve ter pelo menos um número, "
+                    "pelo menos um caractere maiúsculo e um minúsculo, "
+                    "pelo menos um símbolo especial e "
+                    "deve ter entre 6 e 20 caracteres."
+                )
+            },
+            status="fail",
+            http_code=400,
+        )
+
     return generate_response_payload(status="success", http_code=201)

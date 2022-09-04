@@ -3,10 +3,10 @@ import signal
 
 from flask import Flask
 
+from cashback.api.auth.views import auth_blueprint
 from cashback.api.healthcheck.views import healthcheck_blueprint
 from cashback.api.reseller.views import resellers_blueprint
 from cashback.api.sales.views import sales_blueprint
-from cashback.api.auth.views import auth_blueprint
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -32,13 +32,13 @@ def handle_sigterm(*args):
 
 
 def create_app(*args, **kwargs):
-    signal.signal(signal.SIGTERM, handle_sigterm)
+    signal.signal(signalnum=signal.SIGTERM, handler=handle_sigterm)
 
     app = Flask(__name__)
-    app.register_blueprint(healthcheck_blueprint)
-    app.register_blueprint(auth_blueprint)
-    app.register_blueprint(resellers_blueprint)
-    app.register_blueprint(sales_blueprint)
+    app.register_blueprint(blueprint=healthcheck_blueprint)
+    app.register_blueprint(blueprint=auth_blueprint)
+    app.register_blueprint(blueprint=resellers_blueprint)
+    app.register_blueprint(blueprint=sales_blueprint)
 
     return app
 

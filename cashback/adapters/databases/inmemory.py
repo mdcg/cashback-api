@@ -1,4 +1,5 @@
 from cashback.ports.database import DatabasePort
+from cashback.domain.exceptions import ResellerAlreadyRegistedException
 
 
 class InMemoryAdapter(DatabasePort):
@@ -7,6 +8,9 @@ class InMemoryAdapter(DatabasePort):
         self.sales = []
 
     def create_reseller(self, reseller_payload: dict) -> bool:
+        if self.get_reseller_by_cpf(cpf=reseller_payload.get("cpf")):
+            raise ResellerAlreadyRegistedException()
+
         self.resellers.append(reseller_payload)
         return True
 

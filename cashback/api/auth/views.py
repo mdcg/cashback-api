@@ -1,8 +1,8 @@
 from cashback import cashback_user_cases
 from cashback.api.utils.response import generate_response_payload
 from cashback.domain.exceptions import (
-    UnauthorizedException,
     ResellerNotFoundException,
+    UnauthorizedException,
 )
 from flask import Blueprint, request
 
@@ -26,7 +26,9 @@ def authentication():
         )
 
     try:
-        auth_token = cashback_user_cases.authenticate_user(email, password)
+        auth_token = cashback_user_cases.authenticate_user(
+            email=email, password=password
+        )
     except ResellerNotFoundException:
         return generate_response_payload(
             data={"email": "Revendedor não encontrado."},
