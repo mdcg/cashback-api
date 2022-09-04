@@ -23,7 +23,7 @@ def get_connection():
     conn = psycopg2.connect(POSTGRESQL_URI)
     cursor = conn.cursor()
     try:
-        yield conn, cursor
+        yield (conn, cursor)
     finally:
         cursor.close()
         conn.close()
@@ -32,9 +32,7 @@ def get_connection():
 def create_cashback_db():
     logger.info("Creating Cashback database...")
 
-    with get_connection() as conn, cur:
-        conn = psycopg2.connect(POSTGRESQL_URI)
-        cur = conn.cursor()
+    with get_connection() as (conn, cur):
         try:
             cur.execute(
                 (
