@@ -1,13 +1,16 @@
 from cashback import cashback_user_cases
 from cashback.api.utils.authentication.decorators import token_required
 from cashback.api.utils.response import generate_response_payload
+from cashback.api.utils.validation.incomming_payload_schemas import sale_schema
 from cashback.domain.exceptions import ResellerNotFoundException
 from flask import Blueprint, request
+from flask_expects_json import expects_json
 
 sales_blueprint = Blueprint("sales", __name__)
 
 
 @sales_blueprint.route("/sales", methods=["POST"])
+@expects_json(sale_schema)
 @token_required
 def create_sale(cpf):
     payload = request.json

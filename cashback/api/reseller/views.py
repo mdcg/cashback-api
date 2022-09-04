@@ -1,18 +1,23 @@
 from cashback import cashback_user_cases
 from cashback.api.utils.response import generate_response_payload
-from flask import Blueprint, request
-from cashback.domain.exceptions import (
-    ResellerAlreadyRegistedException,
-    InvalidCPFException,
-    InvalidNameException,
-    InvalidEmailException,
-    InvalidPasswordException,
+from cashback.api.utils.validation.incomming_payload_schemas import (
+    reseller_schema,
 )
+from cashback.domain.exceptions import (
+    InvalidCPFException,
+    InvalidEmailException,
+    InvalidNameException,
+    InvalidPasswordException,
+    ResellerAlreadyRegistedException,
+)
+from flask import Blueprint, request
+from flask_expects_json import expects_json
 
 resellers_blueprint = Blueprint("resellers", __name__)
 
 
 @resellers_blueprint.route("/resellers", methods=["POST"])
+@expects_json(reseller_schema)
 def create_reseller():
     try:
         cashback_user_cases.create_reseller(payload=request.json)

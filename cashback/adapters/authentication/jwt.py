@@ -48,4 +48,4 @@ class JWTAuthenticationAdapter(AuthenticationPort):
             "sub": reseller_cpf,
         }
 
-        return jwt.encode(paylod=payload, key=SECRET_KEY, algorithm="HS256")
+        return jwt.encode(payload=payload, key=SECRET_KEY, algorithm="HS256")

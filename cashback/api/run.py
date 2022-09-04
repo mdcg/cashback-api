@@ -2,11 +2,13 @@ import logging
 import signal
 
 from flask import Flask
+from jsonschema import ValidationError
 
 from cashback.api.auth.views import auth_blueprint
 from cashback.api.healthcheck.views import healthcheck_blueprint
 from cashback.api.reseller.views import resellers_blueprint
 from cashback.api.sales.views import sales_blueprint
+from cashback.api.utils.response import generate_response_payload
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -31,10 +33,25 @@ def handle_sigterm(*args):
     raise SystemExit
 
 
+def bad_request_handler(error):
+    if isinstance(error.description, ValidationError):
+        original_error = error.description
+        return generate_response_payload(
+            data={"error": original_error.message},
+            status="fail",
+            http_code=400,
+        )
+
+    return error
+
+
 def create_app(*args, **kwargs):
     signal.signal(signalnum=signal.SIGTERM, handler=handle_sigterm)
 
     app = Flask(__name__)
+
+    app.register_error_handler(400, bad_request_handler)
+
     app.register_blueprint(blueprint=healthcheck_blueprint)
     app.register_blueprint(blueprint=auth_blueprint)
     app.register_blueprint(blueprint=resellers_blueprint)
@@ -46,6 +63,6 @@ def create_app(*args, **kwargs):
 if __name__ == "__main__":
     app = create_app()
     try:
-        app.run(host="0.0.0.0", use_reloader=False) # nosec
+        app.run(host="0.0.0.0", use_reloader=False)  # nosec
     except (KeyboardInterrupt, SystemExit):
         logging.info("Gracefuly stopping Northbound API...")
