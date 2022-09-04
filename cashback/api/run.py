@@ -31,7 +31,7 @@ def handle_sigterm(*args):
     raise SystemExit
 
 
-if __name__ == "__main__":
+def create_app(*args, **kwargs):
     signal.signal(signal.SIGTERM, handle_sigterm)
 
     app = Flask(__name__)
@@ -40,6 +40,10 @@ if __name__ == "__main__":
     app.register_blueprint(resellers_blueprint)
     app.register_blueprint(sales_blueprint)
 
+    return app
+
+if __name__ == "__main__":
+    app = create_app()    
     try:
         app.run(host="0.0.0.0", use_reloader=False)
     except (KeyboardInterrupt, SystemExit):

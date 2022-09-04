@@ -1,5 +1,5 @@
 from functools import wraps
-from cashback.api import cashback_user_cases
+from cashback import cashback_user_cases
 from flask import request
 from cashback.api.utils.response import generate_response_payload
 from cashback.domain.exceptions import (

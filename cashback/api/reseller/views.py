@@ -1,4 +1,4 @@
-from cashback.api import cashback_user_cases
+from cashback import cashback_user_cases
 from cashback.api.utils.response import generate_response_payload
 from flask import Blueprint, request
 
