@@ -1,5 +1,5 @@
-from cashback.ports.database import DatabasePort
 from cashback.domain.exceptions import ResellerAlreadyRegistedException
+from cashback.ports.database import DatabasePort
 
 
 class InMemoryAdapter(DatabasePort):

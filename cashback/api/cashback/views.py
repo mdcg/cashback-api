@@ -1,11 +1,12 @@
-from cashback import cashback_user_cases
-from cashback.api.utils.response import generate_response_payload
-from cashback.api.utils.authentication.decorators import token_required
-from cashback.domain.exceptions import (
-    ResellerNotFoundException,
-    AccumaltedCashbackAPIUnavailableException,
-)
 from flask import Blueprint
+
+from cashback import cashback_user_cases
+from cashback.api.utils.authentication.decorators import token_required
+from cashback.api.utils.response import generate_response_payload
+from cashback.domain.exceptions import (
+    AccumaltedCashbackAPIUnavailableException,
+    ResellerNotFoundException,
+)
 
 cashback_blueprint = Blueprint("cashback", __name__)
 
@@ -19,13 +20,13 @@ def reseller_current_cashback(reseller_cpf):
                 cpf=reseller_cpf
             )
         )
-    except ResellerNotFoundException as error:
+    except ResellerNotFoundException:
         return generate_response_payload(
             data={"cpf": "Revendedor não encontrado."},
             status="fail",
             http_code=404,
         )
-    except AccumaltedCashbackAPIUnavailableException as error:
+    except AccumaltedCashbackAPIUnavailableException:
         return generate_response_payload(
             message=(
                 "Não foi possível recuperar o cashback acumulado. "

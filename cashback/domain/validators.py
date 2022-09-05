@@ -26,7 +26,7 @@ class Validator:
     @staticmethod
     def validate_password(password):
         regex = re.compile(
-            "^(?=.*[a-zç])(?=.*[A-ZÇ])(?=.*\d)(?=.*[@$!%*#?&\-])[A-Za-zçÇ\d@$!#%*?&\-]{6,20}$"
+            "^(?=.*[a-zç])(?=.*[A-ZÇ])(?=.*\d)(?=.*[@$!%*#?&\-])[A-Za-zçÇ\d@$!#%*?&\-]{6,20}$"  # noqa
         )
         if not bool(re.search(regex, password)):
             raise InvalidPasswordException()

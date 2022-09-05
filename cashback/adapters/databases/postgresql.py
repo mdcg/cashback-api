@@ -3,12 +3,12 @@ from os import getenv
 
 import psycopg2
 import psycopg2.extras
-from cashback.ports.database import DatabasePort
 from cashback.domain.exceptions import (
     ResellerAlreadyRegistedException,
     SaleAlreadyRegistedException,
     SaleDatetimeFormatException,
 )
+from cashback.ports.database import DatabasePort
 
 POSTGRESQL_URI = getenv(
     "POSTGRESQL_URI", "postgresql://postgres:postgres@localhost:5432/postgres"
@@ -31,7 +31,8 @@ class PostgreSQLAdapter(DatabasePort):
             try:
                 cur.execute(
                     (
-                        "INSERT INTO resellers (fullname, cpf, email, password)"
+                        "INSERT INTO resellers "
+                        "(fullname, cpf, email, password) "
                         "VALUES (%s, %s, %s, %s);"
                     ),
                     (
@@ -62,7 +63,8 @@ class PostgreSQLAdapter(DatabasePort):
             try:
                 cur.execute(
                     (
-                        "INSERT INTO sales (code, date, value, reseller_cpf, status)"
+                        "INSERT INTO sales "
+                        "(code, date, value, reseller_cpf, status) "
                         "VALUES (%s, %s, %s, %s, %s);"
                     ),
                     (

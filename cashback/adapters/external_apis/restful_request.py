@@ -1,10 +1,11 @@
 from decimal import Decimal
 from os import getenv
+
 import requests
-from cashback.ports.external_api import ExternalRequestPort
 from cashback.domain.exceptions import (
     AccumaltedCashbackAPIUnavailableException,
 )
+from cashback.ports.external_api import ExternalRequestPort
 
 ACCUMULATED_CASHBACK_RESTFUL_API_URL = getenv(
     "ACCUMULATED_CASHBACK_RESTFUL_API_URL",

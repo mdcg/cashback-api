@@ -1,8 +1,8 @@
 from decimal import Decimal
 from enum import Enum
 
-from cashback.settings import AUTOMATIC_APPROVED_RESELLERS_CPFS
 from cashback.domain.validators import Validator
+from cashback.settings import AUTOMATIC_APPROVED_RESELLERS_CPFS
 
 
 class SaleStatus(Enum):

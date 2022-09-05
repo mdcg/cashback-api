@@ -21,21 +21,21 @@ resellers_blueprint = Blueprint("resellers", __name__)
 def create_reseller():
     try:
         cashback_user_cases.create_reseller(payload=request.json)
-    except ResellerAlreadyRegistedException as error:
+    except ResellerAlreadyRegistedException:
         return generate_response_payload(
             data={"message": "CPF/E-mail já cadastrado."},
             status="fail",
             http_code=400,
         )
-    except InvalidCPFException as error:
+    except InvalidCPFException:
         return generate_response_payload(
             data={"cpf": "CPF inválido."}, status="fail", http_code=400
         )
-    except InvalidNameException as error:
+    except InvalidNameException:
         return generate_response_payload(
             data={"fullname": "Nome inválido."}, status="fail", http_code=400
         )
-    except InvalidEmailException as error:
+    except InvalidEmailException:
         return generate_response_payload(
             data={"email": "E-mail inválido."}, status="fail", http_code=400
         )

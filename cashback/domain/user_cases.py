@@ -1,9 +1,10 @@
 from decimal import Decimal
+
 from cashback.domain.exceptions import (
     ResellerNotFoundException,
     UnauthorizedException,
 )
-from cashback.domain.models import Reseller, Sale, Cashback
+from cashback.domain.models import Cashback, Reseller, Sale
 from cashback.settings import CONFIG
 
 
@@ -80,6 +81,6 @@ class CashbackAPIUserCases:
         }
 
     def get_reseller_accumulated_cashback(self, cpf: str) -> Decimal:
-        return self.accumulated_cashback_api.check_accumulated_cashback_from_a_reseller(
+        return self.accumulated_cashback_api.check_accumulated_cashback_from_a_reseller(  # noqa
             reseller_cpf=cpf
         )
