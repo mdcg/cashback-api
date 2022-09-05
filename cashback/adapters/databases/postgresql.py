@@ -4,7 +4,11 @@ from os import getenv
 import psycopg2
 import psycopg2.extras
 from cashback.ports.database import DatabasePort
-from cashback.domain.exceptions import ResellerAlreadyRegistedException
+from cashback.domain.exceptions import (
+    ResellerAlreadyRegistedException,
+    SaleAlreadyRegistedException,
+    SaleDatetimeFormatException,
+)
 
 POSTGRESQL_URI = getenv(
     "POSTGRESQL_URI", "postgresql://postgres:postgres@localhost:5432/postgres"
@@ -55,20 +59,25 @@ class PostgreSQLAdapter(DatabasePort):
 
     def create_sale(self, sale_payload: dict) -> bool:
         with self.get_connection() as (conn, cur):
-            cur.execute(
-                (
-                    "INSERT INTO sales (code, date, value, reseller_cpf, status)"
-                    "VALUES (%s, %s, %s, %s, %s);"
-                ),
-                (
-                    sale_payload["code"],
-                    sale_payload["date"],
-                    sale_payload["value"],
-                    sale_payload["status"],
-                    sale_payload["reseller_cpf"],
-                ),
-            )
-            conn.commit()
+            try:
+                cur.execute(
+                    (
+                        "INSERT INTO sales (code, date, value, reseller_cpf, status)"
+                        "VALUES (%s, %s, %s, %s, %s);"
+                    ),
+                    (
+                        sale_payload["code"],
+                        sale_payload["date"],
+                        sale_payload["value"],
+                        sale_payload["reseller_cpf"],
+                        sale_payload["status"],
+                    ),
+                )
+                conn.commit()
+            except psycopg2.errors.UniqueViolation:
+                raise SaleAlreadyRegistedException()
+            except psycopg2.errors.DatetimeFieldOverflow:
+                raise SaleDatetimeFormatException()
 
         return True
 

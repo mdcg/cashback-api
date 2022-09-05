@@ -47,6 +47,7 @@ class Sale:
         date: str,
         value: Decimal,
         reseller_cpf: str,
+        status: str = None,
         *args: list,
         **kwargs: dict,
     ):
@@ -54,7 +55,7 @@ class Sale:
         self.date = date
         self.value = value
         self.reseller_cpf = reseller_cpf
-        self.status = self.process_default_status()
+        self.status = status if status else self.process_default_status()
 
     def process_default_status(self):
         if self.reseller_cpf in AUTOMATIC_APPROVED_RESELLERS_CPFS:

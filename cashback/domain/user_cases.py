@@ -53,9 +53,11 @@ class CashbackAPIUserCases:
         return Reseller(**reseller_data)
 
     def create_sale(self, payload: dict) -> bool:
-        # Validar payload... Principalmente checando se vem o CPF do reseller
         self.get_reseller(cpf=payload.get("reseller_cpf"))
-        return self.database.create_sale(sale_payload=payload)
+        sale = Sale(**payload)
+        return self.database.create_sale(
+            sale_payload=sale.to_dict(include_reseller_cpf=True)
+        )
 
     def get_reseller_sales(self, cpf: str) -> list[dict]:
         self.get_reseller(cpf)

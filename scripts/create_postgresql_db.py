@@ -53,7 +53,7 @@ def create_cashback_db():
                 CREATE TABLE sales
                     (
                         id serial PRIMARY KEY,
-                        code varchar,
+                        code varchar UNIQUE,
                         date TIMESTAMP,
                         value decimal,
                         reseller_cpf varchar,

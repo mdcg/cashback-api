@@ -26,6 +26,14 @@ class ResellerAlreadyRegistedException(Exception):
     pass
 
 
+class SaleAlreadyRegistedException(Exception):
+    pass
+
+
+class SaleDatetimeFormatException(Exception):
+    pass
+
+
 class TokenExpiredException(Exception):
     pass
 

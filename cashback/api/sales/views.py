@@ -2,7 +2,10 @@ from cashback import cashback_user_cases
 from cashback.api.utils.authentication.decorators import token_required
 from cashback.api.utils.response import generate_response_payload
 from cashback.api.utils.validation.incomming_payload_schemas import sale_schema
-from cashback.domain.exceptions import ResellerNotFoundException
+from cashback.domain.exceptions import (
+    ResellerNotFoundException,
+    SaleAlreadyRegistedException,
+)
 from flask import Blueprint, request
 from flask_expects_json import expects_json
 
@@ -23,6 +26,12 @@ def create_sale(cpf):
             data={"cpf": "Revendedor não encontrado."},
             status="fail",
             http_code=404,
+        )
+    except SaleAlreadyRegistedException:
+        return generate_response_payload(
+            data={"code": "Venda já cadastrada."},
+            status="fail",
+            http_code=400,
         )
 
     return generate_response_payload(status="success", http_code=201)
