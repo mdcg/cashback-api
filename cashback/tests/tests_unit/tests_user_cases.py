@@ -10,7 +10,7 @@ from cashback.domain.exceptions import (
     ResellerNotFoundException,
     UnauthorizedException,
 )
-from cashback.domain.models import Reseller, Sale
+from cashback.domain.models import Reseller
 from cashback.domain.user_cases import CashbackAPIUserCases
 
 
@@ -41,7 +41,7 @@ class TestUserCases(unittest.TestCase):
             return_value="01234567890"
         )
         self.assertEqual(
-            self.cashback_user_cases.authenticate_user(
+            self.cashback_user_cases.authenticate_user(  # nosec
                 email="mauro.reseller@cash.com", password="Geek12@"
             ),
             "01234567890",
@@ -52,7 +52,7 @@ class TestUserCases(unittest.TestCase):
     ):
         self.database.get_reseller_by_email = MagicMock(return_value=None)
         with self.assertRaises(ResellerNotFoundException):
-            self.cashback_user_cases.authenticate_user(
+            self.cashback_user_cases.authenticate_user(  # nosec
                 email="mauro.reseller@cash.com", password="Geek12@"
             )
 
@@ -70,7 +70,7 @@ class TestUserCases(unittest.TestCase):
         )
         self.authentication.check_password = MagicMock(return_value=False)
         with self.assertRaises(UnauthorizedException):
-            self.cashback_user_cases.authenticate_user(
+            self.cashback_user_cases.authenticate_user(  # nosec
                 email="mauro.reseller@cash.com", password="Geek12@"
             )
 
@@ -79,7 +79,7 @@ class TestUserCases(unittest.TestCase):
     def test_should_extract_reseller_cpf_from_authentication_token(
         self,
     ):
-        token = "eyJ0eXAiO.iJKV1QiLCJhbGci.OiJIUzI1NiJ9"
+        token = "eyJ0eXAiO.iJKV1QiLCJhbGci.OiJIUzI1NiJ9"  # nosec
         self.cashback_user_cases.extract_reseller_cpf_from_auth_token(
             token=token
         )
@@ -88,7 +88,7 @@ class TestUserCases(unittest.TestCase):
         )
 
     def test_should_register_a_reseller(self):
-        hashed_password = "d1e8a70b5ccab1dc2f56bbf7e99"
+        hashed_password = "d1e8a70b5ccab1dc2f56bbf7e99"  # nosec
         payload = {
             "cpf": "01234567890",
             "fullname": "Mauro Carvalho",
@@ -298,7 +298,7 @@ class TestUserCases(unittest.TestCase):
         self.database.get_all_sales_from_a_reseller_from_current_month = (
             MagicMock(return_value=data)
         )
-        sales_with_cashback = self.cashback_user_cases.get_sales_from_reseller_with_cashback_applied(
+        sales_with_cashback = self.cashback_user_cases.get_sales_from_reseller_with_cashback_applied(  # noqa
             cpf="01234567890"
         )
 
@@ -307,24 +307,24 @@ class TestUserCases(unittest.TestCase):
             parsed_data_with_cashback,
         )
 
-    def test_should_not_get_sales_from_reseller_with_cashback_applied_when_reseller_not_found(
+    def test_should_not_get_sales_from_reseller_with_cashback_applied_when_reseller_not_found(  # noqa
         self,
     ):
         self.cashback_user_cases.get_reseller = MagicMock(
             side_effect=ResellerNotFoundException
         )
         with self.assertRaises(ResellerNotFoundException):
-            self.cashback_user_cases.get_sales_from_reseller_with_cashback_applied(
+            self.cashback_user_cases.get_sales_from_reseller_with_cashback_applied(  # noqa
                 cpf="01234567890"
             )
 
-        self.database.get_all_sales_from_a_reseller_from_current_month.assert_not_called()
+        self.database.get_all_sales_from_a_reseller_from_current_month.assert_not_called()  # noqa
 
     def test_should_get_reseller_accumulated_cashback(self):
         reseller_cpf = "01234567890"
         self.cashback_user_cases.get_reseller_accumulated_cashback(
             cpf=reseller_cpf
         )
-        self.accumulated_cashback_api.check_accumulated_cashback_from_a_reseller.assert_called_with(
+        self.accumulated_cashback_api.check_accumulated_cashback_from_a_reseller.assert_called_with(  # noqa
             reseller_cpf=reseller_cpf
         )

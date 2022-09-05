@@ -43,9 +43,10 @@ def create_reseller():
         return generate_response_payload(
             data={
                 "password": (
-                    "It must have at least one number, at least one uppercase "
-                    "and one lowercase character, at least one special symbol, "
-                    "and must be between 6 and 20 characters long."
+                    "It must have at least one number, at least one "
+                    "uppercase, and one lowercase character, at least "
+                    "one special symbol, and must be between 6 and 20 "
+                    "characters long."
                 )
             },
             status="fail",
