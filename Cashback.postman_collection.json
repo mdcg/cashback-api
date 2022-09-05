@@ -12,7 +12,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"cpf\": \"01234567890\",\n    \"fullname\": \"Mauro de Carvalho\",\n    \"email\": \"mauro.reseller@cash.com\",\n    \"password\": \"123456789\"\n}",
+					"raw": "{\n    \"cpf\": \"01234567890\",\n    \"fullname\": \"Mauro Carvalho\",\n    \"email\": \"mauro.reselle1r@cash.com\",\n    \"password\": \"Geek12@\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -39,7 +39,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"email\": \"mauro.reseller@cash.com\",\n    \"password\": \"123456789\"\n}",
+					"raw": "{\n    \"email\": \"mauro.reselle1r@cash.com\",\n    \"password\": \"Geek12@\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -66,13 +66,13 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NjIyNjQ5NTgsImlhdCI6MTY2MjIzNjE1OCwic3ViIjoiMDYxMTEzNjM1MDYifQ.8LrBKDkVnkVa_RHHvlnTU_LK3JkXFdMhCzsSq5vmvZY",
+						"value": "Bearer <TOKEN>",
 						"type": "default"
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"code\": \"123-123-123\",\n    \"date\": \"1221321\",\n    \"value\": 100\n}",
+					"raw": "{\n    \"code\": \"1234516\",\n    \"date\": \"2022-09-04 19:10:25\",\n    \"value\": 1000\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -93,13 +93,13 @@
 			"response": []
 		},
 		{
-			"name": "Sales from Reseller",
+			"name": "All Sales from Reseller",
 			"request": {
 				"method": "GET",
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NjIyNjQ5NTgsImlhdCI6MTY2MjIzNjE1OCwic3ViIjoiMDYxMTEzNjM1MDYifQ.8LrBKDkVnkVa_RHHvlnTU_LK3JkXFdMhCzsSq5vmvZY",
+						"value": "Bearer <TOKEN>",
 						"type": "default"
 					}
 				],
@@ -111,6 +111,74 @@
 					"port": "5000",
 					"path": [
 						"sales"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Accumulated Cashback from Reseller",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer <TOKEN>",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "localhost:5000/resellers/cashback",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"resellers",
+						"cashback"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Sales Cashback",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer <TOKEN>",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "localhost:5000/sales/cashback",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"sales",
+						"cashback"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Healthcheck",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/healthcheck",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"healthcheck"
 					]
 				}
 			},
