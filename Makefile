@@ -19,6 +19,9 @@ lint:
 format:
 	@black -l 79 --exclude env .
 
+tests:
+	@python -m unittest
+
 security:
 	@echo "Running Bandit..."
 	@bandit -r cashback
