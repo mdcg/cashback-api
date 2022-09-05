@@ -23,30 +23,29 @@ def create_reseller():
         cashback_user_cases.create_reseller(payload=request.json)
     except ResellerAlreadyRegistedException:
         return generate_response_payload(
-            data={"message": "CPF/E-mail já cadastrado."},
+            data={"message": "CPF/E-mail already registered."},
             status="fail",
             http_code=400,
         )
     except InvalidCPFException:
         return generate_response_payload(
-            data={"cpf": "CPF inválido."}, status="fail", http_code=400
+            data={"cpf": "Invalid CPF."}, status="fail", http_code=400
         )
     except InvalidNameException:
         return generate_response_payload(
-            data={"fullname": "Nome inválido."}, status="fail", http_code=400
+            data={"fullname": "Invalid name."}, status="fail", http_code=400
         )
     except InvalidEmailException:
         return generate_response_payload(
-            data={"email": "E-mail inválido."}, status="fail", http_code=400
+            data={"email": "Invalid e-mail."}, status="fail", http_code=400
         )
     except InvalidPasswordException:
         return generate_response_payload(
             data={
                 "password": (
-                    "Deve ter pelo menos um número, "
-                    "pelo menos um caractere maiúsculo e um minúsculo, "
-                    "pelo menos um símbolo especial e "
-                    "deve ter entre 6 e 20 caracteres."
+                    "It must have at least one number, at least one uppercase "
+                    "and one lowercase character, at least one special symbol, "
+                    "and must be between 6 and 20 characters long."
                 )
             },
             status="fail",

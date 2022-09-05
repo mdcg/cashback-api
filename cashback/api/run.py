@@ -1,4 +1,3 @@
-import logging
 import signal
 
 from flask import Flask
@@ -9,18 +8,8 @@ from cashback.api.cashback.views import cashback_blueprint
 from cashback.api.healthcheck.views import healthcheck_blueprint
 from cashback.api.reseller.views import resellers_blueprint
 from cashback.api.sales.views import sales_blueprint
+from cashback.api.utils.logging import logger
 from cashback.api.utils.response import generate_response_payload
-
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
-handler = logging.StreamHandler()
-handler.setFormatter(
-    logging.Formatter(
-        fmt="[CASHBACK_API] %(asctime)s - %(levelname)s : %(message)s",
-        datefmt="%d/%m/%Y %I:%M:%S %p",
-    )
-)
-logger.addHandler(handler)
 
 
 def handle_sigterm(*args):
@@ -65,6 +54,7 @@ def create_app(*args, **kwargs):
 if __name__ == "__main__":
     app = create_app()
     try:
+        logger.info("Starting Cashback API...")
         app.run(host="0.0.0.0", use_reloader=False)  # nosec
     except (KeyboardInterrupt, SystemExit):
-        logging.info("Gracefuly stopping Cashback API...")
+        logger.info("Gracefuly stopping Cashback API...")

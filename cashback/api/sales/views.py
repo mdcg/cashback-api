@@ -23,13 +23,13 @@ def create_sale(reseller_cpf):
         cashback_user_cases.create_sale(payload=payload)
     except ResellerNotFoundException:
         return generate_response_payload(
-            data={"cpf": "Revendedor não encontrado."},
+            data={"cpf": "Reseller not found."},
             status="fail",
             http_code=404,
         )
     except SaleAlreadyRegistedException:
         return generate_response_payload(
-            data={"code": "Venda já cadastrada."},
+            data={"code": "Sale already registered."},
             status="fail",
             http_code=400,
         )
@@ -44,7 +44,7 @@ def list_sales(reseller_cpf):
         sales = cashback_user_cases.get_reseller_sales(cpf=reseller_cpf)
     except ResellerNotFoundException:
         return generate_response_payload(
-            data={"cpf": "Revendedor não encontrado."},
+            data={"cpf": "Reseller not found."},
             status="fail",
             http_code=404,
         )

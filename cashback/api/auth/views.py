@@ -27,7 +27,7 @@ def authentication():
         )
     except ResellerNotFoundException:
         return generate_response_payload(
-            data={"email": "Revendedor não encontrado."},
+            data={"email": "Reseller not found."},
             status="fail",
             http_code=404,
         )

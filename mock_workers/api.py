@@ -76,9 +76,13 @@ def accumulated_cashback(total_sold):
 def index():
     args = request.args
     if "cpf" not in args:
+        logger.error("Query parameter 'cpf' not informed.")
         return jsonify({}), 400
 
     total_sold_from_cpf = total_sold(cpf=args["cpf"])
+
+    logger.info("Cashback calculated successfully.")
+
     return (
         jsonify(
             {
@@ -91,4 +95,9 @@ def index():
     )
 
 
-app.run(host="0.0.0.0", port="5001", use_reloader=False)
+if __name__ == "__main__":
+    try:
+        logger.info("Starting Mock Accumulated Cashback API...")
+        app.run(host="0.0.0.0", port="5001", use_reloader=False)  # nosec
+    except (KeyboardInterrupt, SystemExit):
+        logger.info("Gracefuly stopping Mock Accumulated Cashback API...")

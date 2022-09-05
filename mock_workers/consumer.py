@@ -70,7 +70,7 @@ def process_sale(reseller_cpf, sale_code):
         status = random_status()
 
         logger.info(
-            f"Venda {sale_code} - Revendedor {reseller_cpf} - Status {status}"
+            f"Sale {sale_code} - Reseller {reseller_cpf} - Status {status}"
         )
 
         cur.execute(
@@ -82,13 +82,16 @@ def process_sale(reseller_cpf, sale_code):
 
 def callback(ch, method, properties, body):
     logger.info("Message received...")
+
     body = json.loads(body)
     process_sale(reseller_cpf=body["reseller_cpf"], sale_code=body["code"])
+
+    logger.info("Done.")
     return ch.basic_ack(delivery_tag=method.delivery_tag)
 
 
 def run():
-    logger.info("Consumer started...")
+    logger.info("Consumer started.")
     credentials = pika.PlainCredentials(RABBITMQ_USER, RABBITMQ_PASS)
     parameters = pika.ConnectionParameters(
         RABBITMQ_HOST, RABBITMQ_PORT, "/", credentials
@@ -103,4 +106,9 @@ def run():
     channel.start_consuming()
 
 
-run()
+if __name__ == "__main__":
+    try:
+        logger.info("Starting Mock Sale Process Consumer...")
+        run()
+    except (KeyboardInterrupt, SystemExit):
+        logger.info("Gracefuly stopping Mock Sale Process Consumer...")

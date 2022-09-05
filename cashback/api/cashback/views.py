@@ -22,15 +22,14 @@ def reseller_current_cashback(reseller_cpf):
         )
     except ResellerNotFoundException:
         return generate_response_payload(
-            data={"cpf": "Revendedor não encontrado."},
+            data={"cpf": "Reseller not found."},
             status="fail",
             http_code=404,
         )
     except AccumaltedCashbackAPIUnavailableException:
         return generate_response_payload(
             message=(
-                "Não foi possível recuperar o cashback acumulado. "
-                "Tente novamente mais tarde."
+                "Unable to recover accumulated cashback. Try again later."
             ),
             status="error",
             http_code=503,
@@ -52,7 +51,7 @@ def list_sales(reseller_cpf):
         )
     except ResellerNotFoundException:
         return generate_response_payload(
-            data={"cpf": "Revendedor não encontrado."},
+            data={"cpf": "Reseller not found."},
             status="fail",
             http_code=404,
         )
