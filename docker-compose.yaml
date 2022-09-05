@@ -7,8 +7,14 @@ services:
     environment:
       - POSTGRESQL_URI=postgresql://postgres:postgres@db/postgres
       - ACCUMULATED_CASHBACK_RESTFUL_API_URL=http://mock_api:5001/v1/cashback
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_PORT=5672
+      - RABBITMQ_USER=guest
+      - RABBITMQ_PASS=guest
+      - SALES_QUEUE_NAME=sales_queue
     depends_on:
       - db
+      - rabbitmq
     ports:
       - "5000:5000"
 
@@ -36,6 +42,7 @@ services:
       - RABBITMQ_PORT=5672
       - RABBITMQ_USER=guest
       - RABBITMQ_PASS=guest
+      - SALES_QUEUE_NAME=sales_queue
       - POSTGRESQL_URI=postgresql://postgres:postgres@db/postgres
     depends_on:
       - rabbitmq
