@@ -4,9 +4,9 @@
 
 Gostaria de agradecer primeiramente a oportunidade de estar participando do processo seletivo. Foi um desafio bem interessante, pude mostrar bastante do meu *know-how* e acredito ter chegado em uma implementação muito boa. Espero que gostem. :)
 
-Dada a natureza do problema proposto, e a partir de algumas análises realizadas, utilizei para a solução deste problema [Arquitetura Hexagonal](https://www.youtube.com/watch?v=X_EPcBNI5xU). O domínio da nossa aplicação ficou totalmente isolado e totalmente agnóstico à tecnologias.
+Dada a natureza do problema proposto, e a partir de algumas análises realizadas, utilizei para a solução deste problema o conceito de [Arquitetura Hexagonal](https://www.youtube.com/watch?v=X_EPcBNI5xU). O domínio da nossa aplicação ficou totalmente isolado e totalmente agnóstico à tecnologia.
 
-A API que foi referenciada no teste prosposto não estava funcionando. Deste modo, tomei a liberdade para criar dois servidores Mock: Uma **API** que retorna o acumulado de cashback e um **Worker** que irá processar as vendas dos revendedores (a lógica de ambos será explicada mais abaixo).
+A API external que foi referenciada no teste prosposto para consulta não estava funcionando. Deste modo, tomei a liberdade para criar dois servidores Mock: Uma **API** que retorna o acumulado de cashback e um **Worker** que irá processar as vendas dos revendedores (a lógica de ambos será explicada mais abaixo).
 
 Para facilitar os testes locais, todos os sistemas podem ser executados com o **Docker** e **Docker Compose**. Desta maneira, se for pertinente testar utilizando estas tecnologias, certifique-se de tê-las instaladas em sua máquina.
 
@@ -22,27 +22,32 @@ Para facilitar a execução de todo sistema, sugiro que siga as instruções da 
 
 ### Tecnologias
 
-Mesmo com o fato de ter sido utilizada Arquitetura Hexagonal para resolução deste problema, ainda assim é pertinente falarmos sobre as principais implementações deste sistema.
+Mesmo com o fato de ter sido utilizada Arquitetura Hexagonal para resolução deste problema, ainda assim é interessante falarmos sobre as principais implementações deste sistema.
 
 * Como linguagem de programação, foi utilizado o Python na versão 3.10+;
 * Existem dois adaptadores de bancos de dados: Um "Em memória" e outro utilizando o PostgreSQL na versão 11+;
-* Foi implementado um adaptador para publicar mensagens em filas do RabbitMQ 3.10.7;
+* Foi implementado um adaptador para publicar mensagens em filas do RabbitMQ na versão 3.10.7;
 * Foi implementado um adaptador de autenticação que utiliza o JWT;
 * Foi implementado um adaptador para enviar requisições HTTP para APIs externas;
-* O sistema é servido a partir de uma interface RESTful que foi construída utilizando o framework Flask;
+* O sistema principal é servido a partir de uma interface RESTful que foi construída utilizando o framework Flask;
 * Existem dois servidores Mock: Um para consultar o acumulado de cashback de um determinado revendedor (também com Flask) e outro para processar os status das vendas de maneira assíncrona (utilizando o framework Pika);
 * Como dito anteriormente, também foram utilizados o Docker e o Docker Compose para facilitar a execução de todos os sistemas em conjunto.
 
 
-## Diagramas do Sistemas
+## Diagramas dos Sistemas
 
-Para facilitar a visualização e comunicação do sistema com os servidores Mock, abaixo segue alguns diagramas bastante pertinentes:
+Para facilitar a visualização e comunicação do sistema com os servidores Mock, além de outros fluxos, abaixo segue alguns diagramas bem representativos:
 
-<Colocar imagens dos diagramas>
+<img src="resources/fluxo-nova-compra.png" />
+
+<img src="resources/fluxo-cashback-acumulado.png" />
+
+<img src="resources/demais-fluxos.png" />
+
 
 ## Executando o sistema localmente
 
-Novamente, é reforçada a utilização do **Docker** e do **Docker Compose** para a execução dos sistemas. Abaixo seguem os comandos que deverão ser executados em sequência para que tudo funcione corretamente.
+Novamente, é reforçado a utilização do **Docker** e do **Docker Compose** para a execução dos sistemas. Abaixo seguem os comandos que deverão ser executados, em sequência, para que tudo funcione corretamente.
 
 Inicializando as dependências (PostgreSQL, Provisionamento do Banco de Dados e RabbitMQ):
 
@@ -75,11 +80,11 @@ docker logs <identificador_do_container> -f
 # Caso você não queira ficar "acompanhando os logs", remova a opção -f
 ```
 
-Também está disponível neste repositório as coleções com exemplos de requisições para a API RESTful do problema proposto. Ela foi exportada utilizando o **Postman**, para facilitar, sugiro que utilize também essa ferramenta para testar a aplicação (lembre-se de importar a coleção). Caso seja pertinente, esta documentação pode ajudar na hora de importar a coleção: [Importing Data Into Postman](https://learning.postman.com/docs/getting-started/importing-and-exporting-data/#importing-data-into-postman)
+Também está disponível neste repositório as coleções com exemplos de requisições para a API RESTful do problema proposto. Ela foi exportada utilizando o **Postman**, para facilitar, sugiro que utilize também essa ferramenta para testar a aplicação (lembre-se de importar a coleção). Caso haja alguma dificuldade na hora da importação da coleção, esta documentação pode ajudar: [Importing Data Into Postman](https://learning.postman.com/docs/getting-started/importing-and-exporting-data/#importing-data-into-postman)
 
 ## Executando os testes
 
-Para executar os testes unitários, é interessante que você crie uma **virtualenv** antes. Abaixo temos o passo-a-passo para criar, inicializar e instalar as bibliotecas necessárias para o funcionamento dos testes:
+Para executar os testes unitários, é interessante que você crie uma **virtualenv** antes. Abaixo temos o passo-a-passo para criar a virtualenv, inicializá-la e instalar as bibliotecas necessárias para o funcionamento dos testes:
 
 ```
 python -m venv env
@@ -87,7 +92,7 @@ source env/bin/activate
 make install
 ```
 
-Para executar os testes, execute:
+Para executar os testes:
 
 ```
 make tests
