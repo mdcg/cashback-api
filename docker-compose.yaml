@@ -11,11 +11,45 @@ services:
     ports:
       - "5000:5000"
 
+  mock_api:
+    build:
+      context: .
+    command: sh -c "python -m scripts.create_postgresql_db && python -m mock_workers.api"
+    restart: always
+    environment:
+      - POSTGRESQL_URI=postgresql://postgres:postgres@db/postgres
+    depends_on:
+      - db
+    ports:
+      - "5001:5001"
+
+  mock_consumer:
+    build:
+      context: .
+    command: sh -c "python -m mock_workers.consumer"
+    restart: always
+    stdin_open: true
+    tty: true
+    environment:
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_PORT=5672
+      - RABBITMQ_USER=guest
+      - RABBITMQ_PASS=guest
+      - POSTGRESQL_URI=postgresql://postgres:postgres@db/postgres
+    depends_on:
+      - rabbitmq
+
+  rabbitmq:
+    image: rabbitmq:3.10.7-alpine
+    restart: always
+    ports:
+      - "5672:5672"
+
   db:
     image: postgres:11
+    restart: always
     ports:
       - "5432:5432"
-    restart: always
     environment:
       - POSTGRES_PASSWORD=postgres
       - DATABASE_URL=postgresql://postgres:postgres@db/postgres

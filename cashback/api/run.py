@@ -65,4 +65,4 @@ if __name__ == "__main__":
     try:
         app.run(host="0.0.0.0", use_reloader=False)  # nosec
     except (KeyboardInterrupt, SystemExit):
-        logging.info("Gracefuly stopping Northbound API...")
+        logging.info("Gracefuly stopping Cashback API...")

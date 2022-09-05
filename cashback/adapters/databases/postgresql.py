@@ -57,13 +57,14 @@ class PostgreSQLAdapter(DatabasePort):
         with self.get_connection() as (conn, cur):
             cur.execute(
                 (
-                    "INSERT INTO sales (code, date, value, reseller_cpf)"
-                    "VALUES (%s, %s, %s, %s);"
+                    "INSERT INTO sales (code, date, value, reseller_cpf, status)"
+                    "VALUES (%s, %s, %s, %s, %s);"
                 ),
                 (
                     sale_payload["code"],
                     sale_payload["date"],
                     sale_payload["value"],
+                    sale_payload["status"],
                     sale_payload["reseller_cpf"],
                 ),
             )
