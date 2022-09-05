@@ -3,11 +3,14 @@
 install:
 	@pip install -r requirements.txt
 
-deps:
+start-deps:
 	@docker-compose up -d db rabbitmq
 
-mock-servers:
+start-mock-servers:
 	@docker-compose up -d mock_api mock_consumer
+
+start-api:
+	@docker-compose up api
 
 run:
 	@python -m cashback.api.run
@@ -23,5 +26,4 @@ tests:
 	@python -m unittest
 
 security:
-	@echo "Running Bandit..."
 	@bandit -r cashback
