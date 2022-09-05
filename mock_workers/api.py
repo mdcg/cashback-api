@@ -4,13 +4,14 @@
 API bastante simples que consulta no banco de dados as vendas de um
 determinado revendedor no último mês e retorna o acumulado do valor total.
 """
+import logging
 from contextlib import contextmanager
+from decimal import Decimal
 from os import getenv
 
 import psycopg2
 import psycopg2.extras
 from flask import Flask, jsonify, request
-import logging
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -27,6 +28,8 @@ POSTGRESQL_URI = getenv(
     "POSTGRESQL_URI", "postgresql://postgres:postgres@localhost:5432/postgres"
 )
 
+app = Flask(__name__)
+
 
 @contextmanager
 def get_connection():
@@ -39,16 +42,27 @@ def get_connection():
         conn.close()
 
 
-def accumulated_cashback(cpf):
+def total_sold(cpf):
     with get_connection() as (_, cur):
         cur.execute(
-            "SELECT sum(value) as accumulated_cashback FROM sales WHERE reseller_cpf=%s;",
+            "SELECT sum(value) as total_sold FROM sales WHERE reseller_cpf=%s;",
             (cpf,),
         )
-        return cur.fetchone()["accumulated_cashback"]
+        return cur.fetchone()["total_sold"]
 
 
-app = Flask(__name__)
+def accumulated_cashback(total_sold):
+    total_sold = Decimal(total_sold)
+    percentage = None
+
+    if total_sold <= Decimal(1000):
+        percentage = Decimal(0.10)
+    elif total_sold > Decimal(1000) and total_sold <= Decimal(1500):
+        percentage = Decimal(0.15)
+    elif total_sold > Decimal(1500):
+        percentage = Decimal(0.20)
+
+    return str(total_sold * percentage)
 
 
 @app.route("/v1/cashback", methods=["GET"])
@@ -57,9 +71,15 @@ def index():
     if "cpf" not in args:
         return jsonify({}), 400
 
-    accumulated_cashback_from_cpf = accumulated_cashback(cpf=args["cpf"])
+    total_sold_from_cpf = total_sold(cpf=args["cpf"])
     return (
-        jsonify({"accumulated_cashback": accumulated_cashback_from_cpf}),
+        jsonify(
+            {
+                "accumulated_cashback": accumulated_cashback(
+                    total_sold=total_sold_from_cpf
+                )
+            }
+        ),
         200,
     )
 
