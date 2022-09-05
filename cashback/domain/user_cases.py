@@ -5,15 +5,24 @@ from cashback.domain.exceptions import (
     UnauthorizedException,
 )
 from cashback.domain.models import Cashback, Reseller, Sale
-from cashback.settings import CONFIG
+from cashback.ports.authentication import AuthenticationPort
+from cashback.ports.database import DatabasePort
+from cashback.ports.external_api import ExternalRequestPort
+from cashback.ports.publisher import MessagePublisherPort
 
 
 class CashbackAPIUserCases:
-    def __init__(self):
-        self.database = CONFIG["database"]()
-        self.publisher = CONFIG["publisher"]()
-        self.authentication = CONFIG["authentication"]
-        self.accumulated_cashback_api = CONFIG["accumulated_cashback_api"]
+    def __init__(
+        self,
+        database: DatabasePort,
+        publisher: MessagePublisherPort,
+        authentication: AuthenticationPort,
+        accumulated_cashback_api: ExternalRequestPort,
+    ):
+        self.database = database
+        self.publisher = publisher
+        self.authentication = authentication
+        self.accumulated_cashback_api = accumulated_cashback_api
 
     def authenticate_user(self, email: str, password: str) -> str:
         reseller_data = self.database.get_reseller_by_email(email=email)
