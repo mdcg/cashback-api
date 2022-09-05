@@ -17,11 +17,14 @@ class RestfulRequestAdapter(ExternalRequestPort):
     def check_accumulated_cashback_from_a_reseller(
         reseller_cpf: str,
     ) -> Decimal:
-        response = requests.get(
-            f"{ACCUMULATED_CASHBACK_RESTFUL_API_URL}?cpf={reseller_cpf}"
-        )
+        try:
+            response = requests.get(
+                f"{ACCUMULATED_CASHBACK_RESTFUL_API_URL}?cpf={reseller_cpf}"
+            )
+        except requests.exceptions.ConnectionError:
+            raise AccumaltedCashbackAPIUnavailableException()
 
         if response.ok:
-            return Decimal(response.json()["accumulated_cashback"])
+            return "{0:.2f}".format(Decimal(response.json()["accumulated_cashback"]))
 
         raise AccumaltedCashbackAPIUnavailableException()

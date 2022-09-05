@@ -67,7 +67,7 @@ class Sale:
         payload = {
             "code": self.code,
             "date": self.date,
-            "value": self.value,
+            "value": "{0:.2f}".format(Decimal(self.value)),
             "status": self.status,
         }
 
@@ -78,16 +78,40 @@ class Sale:
 
 
 class Cashback:
-    def __init__(self, total_sold: list[Sale]):
-        self.percentage = self.calculate_percentage(total_sold)
+    def __init__(self, sales_in_current_month: list[Sale]):
+        self.__sales = sales_in_current_month
+        self.__total_sold = self.total_sales_value()
+        self.percentage = self.calculate_percentage()
 
-    def calculate_percentage(self, total_sold):
+    def total_sales_value(self):
+        total = Decimal(0)
+        for sale in self.__sales:
+            if sale.status == SaleStatus.APPROVED.value:
+                total += Decimal(sale.value)
+
+        return total
+
+    def calculate_percentage(self):
         percentage = None
-        if total_sold <= Decimal(1000):
+        if self.__total_sold <= Decimal(1000):
             percentage = Decimal(0.10)
-        elif total_sold > Decimal(1000) and total_sold <= Decimal(1500):
+        elif self.__total_sold > Decimal(
+            1000
+        ) and self.__total_sold <= Decimal(1500):
             percentage = Decimal(0.15)
-        elif total_sold > Decimal(1500):
+        elif self.__total_sold > Decimal(1500):
             percentage = Decimal(0.20)
-
         return percentage
+
+    def calculate_cashback_value_to_sales(self):
+        sales_with_cashback_value = []
+        for sale in self.__sales:
+            cashback = 0
+            if sale.status == SaleStatus.APPROVED.value:
+                cashback = "{0:.2f}".format(self.percentage * Decimal(sale.value))
+
+            sales_with_cashback_value.append(
+                {**sale.to_dict(), "cashback": cashback}
+            )
+
+        return sales_with_cashback_value

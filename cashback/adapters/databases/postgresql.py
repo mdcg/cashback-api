@@ -90,3 +90,18 @@ class PostgreSQLAdapter(DatabasePort):
         with self.get_connection() as (conn, cur):
             cur.execute("SELECT * FROM sales WHERE reseller_cpf=%s;", (cpf,))
             return cur.fetchall()
+
+    def get_all_sales_from_a_reseller_from_current_month(
+        self, cpf: str
+    ) -> list[dict]:
+        with self.get_connection() as (conn, cur):
+            cur.execute(
+                (
+                    "SELECT * FROM sales "
+                    "WHERE reseller_cpf=%s "
+                    "AND extract(YEAR FROM date) = extract(YEAR FROM now()) "
+                    "AND extract(MONTH FROM date) = extract(MONTH FROM now());"
+                ),
+                (cpf,),
+            )
+            return cur.fetchall()
