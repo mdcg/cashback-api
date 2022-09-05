@@ -45,14 +45,21 @@ def get_connection():
 def total_sold(cpf):
     with get_connection() as (_, cur):
         cur.execute(
-            "SELECT sum(value) as total_sold FROM sales WHERE reseller_cpf=%s;",
+            "SELECT sum(value) as total_sold FROM sales WHERE reseller_cpf=%s "
+            "AND extract(YEAR FROM date) = extract(YEAR FROM now()) "
+            "AND extract(MONTH FROM date) = extract(MONTH FROM now())"
+            "AND status='Aprovado';",
             (cpf,),
         )
         return cur.fetchone()["total_sold"]
 
 
 def accumulated_cashback(total_sold):
+    if total_sold is None:
+        return "0"
+
     total_sold = Decimal(total_sold)
+
     percentage = None
 
     if total_sold <= Decimal(1000):
