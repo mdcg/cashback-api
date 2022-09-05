@@ -35,7 +35,9 @@ def reseller_current_cashback(reseller_cpf):
             http_code=503,
         )
 
-    return generate_response_payload(data={"cashback": reseller_cashback}, status="success")
+    return generate_response_payload(
+        data={"cashback": reseller_cashback}, status="success"
+    )
 
 
 @cashback_blueprint.route("/sales/cashback", methods=["GET"])

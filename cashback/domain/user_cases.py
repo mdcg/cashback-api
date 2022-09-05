@@ -10,6 +10,7 @@ from cashback.settings import CONFIG
 class CashbackAPIUserCases:
     def __init__(self):
         self.database = CONFIG["database"]()
+        self.publisher = CONFIG["publisher"]()
         self.authentication = CONFIG["authentication"]
         self.accumulated_cashback_api = CONFIG["accumulated_cashback_api"]
 
@@ -53,10 +54,11 @@ class CashbackAPIUserCases:
 
     def create_sale(self, payload: dict) -> bool:
         self.get_reseller(cpf=payload.get("reseller_cpf"))
-        sale = Sale(**payload)
-        return self.database.create_sale(
-            sale_payload=sale.to_dict(include_reseller_cpf=True)
-        )
+        sale_payload = Sale(**payload).to_dict(include_reseller_cpf=True)
+        # Publica as informações da venda para serem processadas
+        # pelo Worker (Mock Consumer).
+        self.publisher.enqueue(payload=sale_payload)
+        return self.database.create_sale(sale_payload=sale_payload)
 
     def get_reseller_sales(self, cpf: str) -> list[dict]:
         self.get_reseller(cpf)

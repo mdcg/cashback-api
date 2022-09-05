@@ -7,7 +7,7 @@ from cashback.domain.validators import Validator
 
 class SaleStatus(Enum):
     APPROVED = "Aprovado"
-    DENIED = "Recusado"
+    DENIED = "Negado"
     WAITING_FOR_VALIDATION = "Em validação"
 
 
@@ -108,7 +108,9 @@ class Cashback:
         for sale in self.__sales:
             cashback = 0
             if sale.status == SaleStatus.APPROVED.value:
-                cashback = "{0:.2f}".format(self.percentage * Decimal(sale.value))
+                cashback = "{0:.2f}".format(
+                    self.percentage * Decimal(sale.value)
+                )
 
             sales_with_cashback_value.append(
                 {**sale.to_dict(), "cashback": cashback}

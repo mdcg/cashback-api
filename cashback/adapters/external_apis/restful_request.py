@@ -25,6 +25,8 @@ class RestfulRequestAdapter(ExternalRequestPort):
             raise AccumaltedCashbackAPIUnavailableException()
 
         if response.ok:
-            return "{0:.2f}".format(Decimal(response.json()["accumulated_cashback"]))
+            return "{0:.2f}".format(
+                Decimal(response.json()["accumulated_cashback"])
+            )
 
         raise AccumaltedCashbackAPIUnavailableException()
