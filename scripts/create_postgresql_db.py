@@ -56,7 +56,8 @@ def create_cashback_db():
                         code varchar,
                         date TIMESTAMP,
                         value decimal,
-                        reseller_cpf varchar
+                        reseller_cpf varchar,
+                        status varchar
                     );
                 """
             )
