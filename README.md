@@ -75,6 +75,8 @@ docker logs <identificador_do_container> -f
 # Caso você não queira ficar "acompanhando os logs", remova a opção -f
 ```
 
+Também está disponível neste repositório as coleções com exemplos de requisições para a API RESTful do problema proposto. Ela foi exportada utilizando o **Postman**, para facilitar, sugiro que utilize também essa ferramenta para testar a aplicação (lembre-se de importar a coleção). Caso seja pertinente, esta documentação pode ajudar na hora de importar a coleção: [Importing Data Into Postman](https://learning.postman.com/docs/getting-started/importing-and-exporting-data/#importing-data-into-postman)
+
 ## Executando os testes
 
 Para executar os testes unitários, é interessante que você crie uma **virtualenv** antes. Abaixo temos o passo-a-passo para criar, inicializar e instalar as bibliotecas necessárias para o funcionamento dos testes:
