@@ -3,6 +3,12 @@
 install:
 	@pip install -r requirements.txt
 
+deps:
+	@docker-compose up -d db rabbitmq
+
+mock-servers:
+	@docker-compose up -d mock_api mock_consumer
+
 run:
 	@python -m cashback.api.run
 
