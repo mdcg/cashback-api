@@ -34,6 +34,10 @@ class SaleDatetimeFormatException(Exception):
     pass
 
 
+class AccumaltedCashbackAPIUnavailableException(Exception):
+    pass
+
+
 class TokenExpiredException(Exception):
     pass
 

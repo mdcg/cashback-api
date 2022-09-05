@@ -78,27 +78,16 @@ class Sale:
 
 
 class Cashback:
-    def __init__(self, sales_in_current_month: list[Sale]):
-        self.__sales = sales_in_current_month
-        self.__total_sold = self.total_sales_value()
-        self.bonus = self.calculate_bonus()
+    def __init__(self, total_sold: list[Sale]):
+        self.percentage = self.calculate_percentage(total_sold)
 
-    def total_sales_value(self):
-        total = Decimal(0)
-        for sale in self.__sales:
-            total += Decimal(sale.value)
-
-        return total
-
-    def calculate_bonus(self):
+    def calculate_percentage(self, total_sold):
         percentage = None
-        if self.__total_sold <= Decimal(1000):
+        if total_sold <= Decimal(1000):
             percentage = Decimal(0.10)
-        elif self.__total_sold > Decimal(
-            1000
-        ) and self.__total_sold <= Decimal(1500):
+        elif total_sold > Decimal(1000) and total_sold <= Decimal(1500):
             percentage = Decimal(0.15)
-        elif self.__total_sold > Decimal(1500):
+        elif total_sold > Decimal(1500):
             percentage = Decimal(0.20)
 
-        return self.__total_sold * percentage
+        return percentage

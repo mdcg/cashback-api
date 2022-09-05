@@ -1,8 +1,10 @@
+from decimal import Decimal
 from cashback.domain.exceptions import (
     ResellerNotFoundException,
     UnauthorizedException,
+    AccumaltedCashbackAPIUnavailableException,
 )
-from cashback.domain.models import Reseller, Sale
+from cashback.domain.models import Reseller, Sale, Cashback
 from cashback.settings import CONFIG
 
 
@@ -10,9 +12,7 @@ class CashbackAPIUserCases:
     def __init__(self):
         self.database = CONFIG["database"]()
         self.authentication = CONFIG["authentication"]
-        self.external_api_communication = CONFIG[
-            "external_api_communication"
-        ]()
+        self.accumulated_cashback_api = CONFIG["accumulated_cashback_api"]
 
     def authenticate_user(self, email: str, password: str) -> str:
         reseller_data = self.database.get_reseller_by_email(email=email)
@@ -63,3 +63,8 @@ class CashbackAPIUserCases:
         self.get_reseller(cpf)
         sales = self.database.get_all_sales_from_a_reseller(cpf=cpf)
         return [Sale(**sale).to_dict() for sale in sales]
+
+    def get_reseller_accumulated_cashback(self, cpf: str) -> Decimal:
+        return self.accumulated_cashback_api.check_accumulated_cashback_from_a_reseller(
+            reseller_cpf=cpf
+        )

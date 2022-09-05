@@ -15,9 +15,9 @@ sales_blueprint = Blueprint("sales", __name__)
 @sales_blueprint.route("/sales", methods=["POST"])
 @expects_json(sale_schema)
 @token_required
-def create_sale(cpf):
+def create_sale(reseller_cpf):
     payload = request.json
-    payload["reseller_cpf"] = cpf
+    payload["reseller_cpf"] = reseller_cpf
 
     try:
         cashback_user_cases.create_sale(payload=payload)

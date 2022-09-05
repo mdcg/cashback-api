@@ -13,38 +13,29 @@ AUTOMATIC_APPROVED_RESELLERS_CPFS = getenv(
 
 DATABASE = getenv("DATABASE", "postgresql")
 
-EXTERNAL_API_COMMUNICATION = getenv("DATABASE", "restful")
+ACCUMULATED_CASHBACK_API_COMMUNICATION = getenv("DATABASE", "restful")
 
 AUTHENTICATION = getenv("AUTHENTICATION", "jwt")
 
-AVAILABLE_DATABASE_IMPLEMENTATIONS = {
+DATABASE_IMPLEMENTATIONS = {
     "inmemory": InMemoryAdapter,
     "postgresql": PostgreSQLAdapter,
 }
 
-AVAILABLE_EXTERNAL_API_IMPLEMENTATIONS = {
+ACCUMULATED_CASHBACK_API_IMPLEMENTATIONS = {
     "restful": RestfulRequestAdapter,
 }
 
-AVAILABLE_AUTHENTICATION_IMPLEMENTATIONS = {
+AUTHENTICATION_TECHNOLOGIES_IMPLEMENTATIONS = {
     "jwt": JWTAuthenticationAdapter,
 }
 
 CONFIG = {
-    "database": AVAILABLE_DATABASE_IMPLEMENTATIONS.get(DATABASE, "postgresql"),
-    "external_api_communication": AVAILABLE_EXTERNAL_API_IMPLEMENTATIONS.get(
-        EXTERNAL_API_COMMUNICATION, "restful"
+    "database": DATABASE_IMPLEMENTATIONS.get(DATABASE, "postgresql"),
+    "accumulated_cashback_api": ACCUMULATED_CASHBACK_API_IMPLEMENTATIONS.get(
+        ACCUMULATED_CASHBACK_API_COMMUNICATION, "restful"
     ),
-    "authentication": AVAILABLE_AUTHENTICATION_IMPLEMENTATIONS.get(
+    "authentication": AUTHENTICATION_TECHNOLOGIES_IMPLEMENTATIONS.get(
         AUTHENTICATION, "jwt"
     ),
 }
-
-# /*                    */
-# /* Adapters Settings  */
-# /*                    */
-
-EXTERNAL_CASHBACK_RESTFUL_API_URL = getenv(
-    "EXTERNAL_CASHBACK_RESTFUL_API_URL",
-    "https://mdaqk8ek5j.execute-api.us-east1.amazonaws.com/v1/cashback",
-)

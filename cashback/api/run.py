@@ -5,6 +5,7 @@ from flask import Flask
 from jsonschema import ValidationError
 
 from cashback.api.auth.views import auth_blueprint
+from cashback.api.cashback.views import cashback_blueprint
 from cashback.api.healthcheck.views import healthcheck_blueprint
 from cashback.api.reseller.views import resellers_blueprint
 from cashback.api.sales.views import sales_blueprint
@@ -56,6 +57,7 @@ def create_app(*args, **kwargs):
     app.register_blueprint(blueprint=auth_blueprint)
     app.register_blueprint(blueprint=resellers_blueprint)
     app.register_blueprint(blueprint=sales_blueprint)
+    app.register_blueprint(blueprint=cashback_blueprint)
 
     return app
 
